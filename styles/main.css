@@ -1,0 +1,90 @@
+@charset "euc-kr";
+
+/* 폰트 설정 */
+@import url("notosanskr.css");
+@import url("nanummyeongjo.css");
+@import url("campton.css");
+
+/* 변수 설정 */
+:root {
+  --wwwitscardcokralto: rgba(221, 221, 221, 1);
+  --wwwitscardcokrblack: rgba(0, 0, 0, 1);
+  /* 여기에 다른 변수들 추가 */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.frame {
+  position: relative;
+  width: 720px;
+  height: 11565px;
+  background-image: url(./img/frame.svg);
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.overlap {
+  position: absolute;
+  width: 720px;
+  height: 11565px;
+  top: 0;
+  left: 0;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  width: 720px;
+  align-items: flex-start;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 60px 50.02px;
+  position: relative;
+  align-self: stretch;
+  width: 100%;
+  flex: 0 0 auto;
+}
+
+/* 여기에 나머지 스타일 추가 */
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  width: 720px;
+  align-items: flex-start;
+  position: absolute;
+  top: 11167px;
+  left: 0;
+  background-color: transparent;
+}
+
+/* 음악 재생 버튼 스타일 */
+.container-51 {
+  display: flex;
+  flex-direction: column;
+  width: 48px;
+  align-items: flex-start;
+  position: fixed;
+  top: 90px;
+  left: 736px;
+}
+
+.music-off-png {
+  position: relative;
+  max-width: 48px;
+  width: 48px;
+  height: 48px;
+  background-image: url(./img/music-01-off-png.png);
+  background-size: cover;
+  background-position: 50% 50%;
+}

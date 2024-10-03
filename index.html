@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding Invitation</title>
+  <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=d8b1ecdaa4f3462f95bafe6227d0c3b6"></script>
+  <style>
+        body {
+            font-family: 'Nanum Myeongjo', serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0;
+            text-align: center;
+            background-color: #fff;
+        }
+        .section {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #eee;
+        }
+        .main-image {
+            width: 100%;
+            max-width: 720px;
+            margin-bottom: 20px;
+        }
+        .couple-names {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .date, .venue {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #666;
+        }
+        .message {
+            margin: 30px 0;
+            padding: 0 50px;
+            font-size: 1.1em;
+            line-height: 2;
+            color: #555;
+        }
+        .contact-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .contact-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        .contact-button img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 10px;
+        }
+        .calendar {
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto 30px;
+            border-collapse: collapse;
+        }
+        .calendar th {
+            background-color: #f8f8f8;
+            padding: 10px;
+        }
+        .calendar td {
+            text-align: center;
+            padding: 10px;
+        }
+        .wedding-day {
+            background-color: #333;
+            color: white;
+            border-radius: 50%;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .gallery img {
+            width: 30%;
+            height: auto;
+            object-fit: cover;
+        }
+        .map {
+            width: 100%;
+            max-width: 720px;
+            height: 300px;
+            margin-bottom: 20px;
+        }
+        .location-info {
+            text-align: left;
+            padding: 0 20px;
+            margin-bottom: 30px;
+        }
+        .location-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+        .location-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+        }
+        .location-button img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 5px;
+        }
+        .rsvp-section {
+            background-color: #f8f8f8;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+        }
+        .rsvp-form input, .rsvp-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+        }
+        .rsvp-form button, .attendance-button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+        }
+        .comments {
+            text-align: left;
+            padding: 0 20px;
+            margin-bottom: 30px;
+        }
+        .comment {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+        .social-share {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .social-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+        }
+        .social-button img {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 5px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .copy-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        #map {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+
+        .modal-content {
+            background-color: #f2f2f7;
+            border-radius: 14px;
+            padding: 20px;
+            max-width: 300px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-button {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 10px;
+            background-color: #ffffff;
+            font-size: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .modal-button:hover {
+            background-color: #e5e5ea;
+        }
+
+        .modal-button.primary {
+            background-color: #007aff;
+            color: #ffffff;
+        }
+
+        .modal-button.primary:hover {
+            background-color: #0056b3;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #d1d1d6;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .modal-group {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+    .modal-group .modal-button {
+        width: 48%;
+    }
+    .modal-button.selected {
+        background-color: #007aff;
+        color: white;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="section">
+        <img src="/1.jpg" alt="Wedding Couple" class="main-image">
+        <h1 class="couple-names">김제희 & 김다니엘</h1>
+        <p class="date">2025. 05. 03. SAT PM 1:30</p>
+        <p class="venue">OO 웨딩홀 O층 OOOO홀</p>
+    </div>
+    
+    <div class="section">
+        <div class="message">
+            <p>서로가 마주보며 다져온 사랑을<br>
+            이제 함께 한 곳을 바라보며<br>
+            걸어갈 수 있는 큰 사랑으로<br>
+            키우고자 합니다.<br>
+            저희 두 사람이 사랑의 이름으로<br>
+            지켜나갈 수 있도록<br>
+            앞날을 축복해 주시면<br>
+            감사하겠습니다.</p>
+        </div>
+    </div>
+
+    <div class="section">
+      <div class="contact-buttons">
+        <div class="contact-button" onclick="callPhone('신랑')">
+            <img src="/call.png" alt="신랑">
+            <span>신랑에게 전화하기</span>
+        </div>
+        <div class="contact-button" onclick="callPhone('신부')">
+            <img src="/call.png" alt="신부">
+            <span>신부에게 전화하기</span>
+        </div>
+    </div>
+    <div class="contact-buttons">
+        <div class="contact-button" onclick="showModal('groom')">
+            <img src="/flower.png" alt="신랑 계좌">
+            <span>신랑측 계좌번호</span>
+        </div>
+        <div class="contact-button" onclick="showModal('bride')">
+            <img src="/flower.png" alt="신부 계좌">
+            <span>신부측 계좌번호</span>
+        </div>
+    </div>
+    </div>
+
+    <div class="section">
+        <table class="calendar">
+            <tr><th colspan="7">May 2025</th></tr>
+            <tr>
+                <td>일</td><td>월</td><td>화</td><td>수</td><td>목</td><td>금</td><td>토</td>
+            </tr>
+            <tr>
+                <td></td><td></td><td></td><td></td><td>1</td><td>2</td><td class="wedding-day">3</td>
+            </tr>
+            <tr>
+                <td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td>
+            </tr>
+            <tr>
+                <td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td>
+            </tr>
+            <tr>
+                <td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td>
+            </tr>
+            <tr>
+                <td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="gallery">
+            <img src="/2.jpg" alt="Wedding Photo 1">
+            <img src="/3.jpg" alt="Wedding Photo 2">
+            <img src="/4.jpg" alt="Wedding Photo 3">
+            <img src="/5.jpg" alt="Wedding Photo 4">
+            <img src="/6.jpg" alt="Wedding Photo 5">
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>오시는 길</h2>
+        <div id="map" style="width:100%;height:400px;"></div>
+    
+        <div class="location-info">
+            <h3>OO 웨딩홀 O층 OOOO홀</h3>
+            <p>서울특별시 OO구 OO로 123</p>
+            <p>Tel. 02-1234-5678</p>
+        </div>
+
+        <div class="location-buttons">
+            <a href="#" class="location-button" id="tmap">
+                <img src="https://www.itscard.co.kr/mobile/new_m/mcard/images/common/location_tmap2.png" alt="Tmap">
+                <span>T map</span>
+            </a>
+            <a href="#" class="location-button" id="kakao-navi">
+                <img src="https://www.itscard.co.kr/mobile/new_m/mcard/images/common/location_kakaonavi.png" alt="kakaonavi">
+                <span>카카오 내비</span>
+            </a>
+            <a href="#" class="location-button" id="naver-map">
+                <img src="https://www.itscard.co.kr/mobile/new_m/mcard/images/common/location_navermap.png" alt="navermap">
+                <span>네이버 지도</span>
+            </a>
+            <a href="#" class="location-button" id="kakao-map">
+                <img src="https://www.itscard.co.kr/mobile/new_m/mcard/images/common/location_kakaomap.png" alt="kakaomap">
+                <span>카카오 맵</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="section">
+      <div class="rsvp-section">
+        <h2>참석 여부 전달</h2>
+        <button class="attendance-button" onclick="showAttendanceModal()">참석 여부 알리기</button>
+    </div>
+
+    <div id="guestbook" class="comments">
+      <h2>방명록</h2>
+      <form id="guestbookForm">
+          <input type="text" id="guestName" placeholder="이름" required>
+          <textarea id="guestMessage" placeholder="축하 메시지를 남겨주세요" required></textarea>
+          <button type="submit">등록하기</button>
+      </form>
+      <div id="guestbookComments">
+          <!-- 방명록 댓글이 여기에 추가됩니다 -->
+      </div>
+  </div>
+    </div>
+
+    <div class="section">
+        <div class="social-share">
+            <a href="#" class="social-button" id="kakao-share">
+                <img src="https://www.itscard.co.kr/mobile/new_m/mcard/images/common/footer_kakao.png" alt="KakaoTalk">
+                <span>카카오톡 공유하기</span>
+            </a>
+            <a href="#" class="social-button" id="facebook-share">
+                <img src="https://www.itscard.co.kr/mobile/new_m/mcard/images/common/footer_facebook.png" alt="Facebook">
+                <span>페이스북 공유하기</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Account Number Modal -->
+    <div id="accountModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <p id="accountNumber"></p>
+            <button class="copy-button" onclick="copyToClipboard()">복사하기</button>
+        </div>
+    </div>
+
+    <!-- Attendance Modal -->
+    <div id="attendanceModal" class="modal">
+      <div class="modal-content">
+          <span class="close">&times;</span>
+          <div class="modal-title">참석 여부</div>
+          <form id="attendanceForm">
+              <input type="text" id="attendanceName" class="modal-input" placeholder="이름" required>
+              <div class="modal-group">
+                  <button type="button" class="modal-button" onclick="setAttendance('참석')">참석</button>
+                  <button type="button" class="modal-button" onclick="setAttendance('미참석')">미참석</button>
+              </div>
+              <div class="modal-group">
+                  <button type="button" class="modal-button" onclick="setMeal('예정')">식사 예정</button>
+                  <button type="button" class="modal-button" onclick="setMeal('미예정')">식사 미예정</button>
+              </div>
+              <input type="number" id="guestCount" class="modal-input" placeholder="동반인원 수" min="0" required>
+              <input type="hidden" id="attendanceStatus" name="attendanceStatus">
+              <input type="hidden" id="mealStatus" name="mealStatus">
+              <button type="submit" class="modal-button primary">제출</button>
+          </form>
+      </div>
+  </div>
+  
+
+    <script>
+        // Modal functionality
+        var accountModal = document.getElementById("accountModal");
+        var attendanceModal = document.getElementById("attendanceModal");
+        var span = document.getElementsByClassName("close");
+
+        function showModal(type) {
+            accountModal.style.display = "block";
+            if (type === 'groom') {
+                document.getElementById("modalTitle").innerText = "신랑측 계좌번호";
+                document.getElementById("accountNumber").innerText = "국민은행 123-456-789012";
+            } else {
+                document.getElementById("modalTitle").innerText = "신부측 계좌번호";
+                document.getElementById("accountNumber").innerText = "신한은행 987-654-321098";
+            }
+        }
+
+        function showAttendanceModal() {
+            attendanceModal.style.display = "block";
+        }
+
+        for (let i = 0; i < span.length; i++) {
+            span[i].onclick = function() {
+                accountModal.style.display = "none";
+                attendanceModal.style.display = "none";
+            }
+        }
+
+        window.onclick = function(event) {
+            if (event.target == accountModal) {
+                accountModal.style.display = "none";
+            }
+            if (event.target == attendanceModal) {
+                attendanceModal.style.display = "none";
+            }
+        }
+
+        // Clipboard copy functionality
+        function copyToClipboard() {
+            var accountNumber = document.getElementById("accountNumber").innerText;
+            navigator.clipboard.writeText(accountNumber).then(function() {
+                alert("계좌번호가 클립보드에 복사되었습니다.");
+            }, function(err) {
+                console.error('Could not copy text: ', err);
+            });
+        }
+
+        // Attendance form submission
+        document.getElementById("attendanceForm").onsubmit = function(e) {
+            e.preventDefault();
+            var name = document.getElementById("attendanceName").value;
+            var status = document.getElementById("attendanceStatus").value;
+            var message = document.getElementById("attendanceMessage").value;
+            
+            var commentDiv = document.createElement("div");
+            commentDiv.className = "comment";
+            commentDiv.innerHTML = "<strong>" + name + " (" + status + ")</strong><p>" + (message || "참석 여부가 전달되었습니다.") + "</p>";
+            
+            document.getElementById("comments").appendChild(commentDiv);
+            attendanceModal.style.display = "none";
+            this.reset();
+        };
+
+        // Navigation app links
+        document.getElementById("tmap").onclick = function(e) {
+            e.preventDefault();
+            window.location.href = "tmap://route?goalname=결혼식장&goalx=127.123456&goaly=37.123456";
+        };
+
+        document.getElementById("kakao-navi").onclick = function(e) {
+            e.preventDefault();
+            window.location.href = "kakaonavi://navigate?goal=결혼식장,127.123456,37.123456";
+        };
+
+        document.getElementById("naver-map").onclick = function(e) {
+            e.preventDefault();
+            window.location.href = "nmap://place?lat=37.123456&lng=127.123456&name=결혼식장";
+        };
+
+        document.getElementById("kakao-map").onclick = function(e) {
+            e.preventDefault();
+            window.location.href = "kakaomap://look?p=37.123456,127.123456";
+        };
+
+        // Social share functionality
+        document.getElementById("kakao-share").onclick = function(e) {
+            e.preventDefault();
+            // Implement Kakao Share API here
+            alert("카카오톡 공유 기능이 실행됩니다. Kakao SDK 필요");
+        };
+
+        document.getElementById("facebook-share").onclick = function(e) {
+            e.preventDefault();
+            var url = encodeURIComponent(window.location.href);
+            window.open('https://www.facebook.com/sharer/sharer.php?u=' + url, 'facebook-share-dialog', 'width=626,height=436');
+        };
+
+        // 전화 연결 함수
+function callPhone(person) {
+    var phoneNumber = person === '신랑' ? '010-1234-5678' : '010-9876-5432';
+    window.location.href = 'tel:' + phoneNumber;
+}
+
+// 참석 여부 모달 표시
+function showAttendanceModal() {
+    attendanceModal.style.display = "block";
+}
+
+// 참석 여부 제출
+document.getElementById("attendanceForm").onsubmit = function(e) {
+    e.preventDefault();
+    var name = document.getElementById("attendanceName").value;
+    var status = document.getElementById("attendanceStatus").value;
+    var message = document.getElementById("attendanceMessage").value;
+    
+    // 여기서 참석 여부를 서버로 전송하는 코드를 추가해야 합니다.
+    // 예: sendAttendanceToServer(name, status, message);
+    
+    alert(name + "님의 참석 여부(" + status + ")가 전달되었습니다.");
+    attendanceModal.style.display = "none";
+    this.reset();
+};
+
+// 방명록 제출
+document.getElementById("guestbookForm").onsubmit = function(e) {
+    e.preventDefault();
+    var name = document.getElementById("guestName").value;
+    var message = document.getElementById("guestMessage").value;
+    
+    var commentDiv = document.createElement("div");
+    commentDiv.className = "comment";
+    commentDiv.innerHTML = "<strong>" + name + "</strong><p>" + message + "</p>";
+    
+    document.getElementById("guestbookComments").appendChild(commentDiv);
+    this.reset();
+};
+        // 카카오 지도 초기화
+        var mapContainer = document.getElementById('map');
+        var mapOption = {
+            center: new kakao.maps.LatLng(37.4315, 127.1695), // A 시티스마트캐슬2.0오피스텔의 좌표
+            level: 3
+        };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+       // 참석 여부 설정
+       function setAttendance(status) {
+        document.getElementById('attendanceStatus').value = status;
+        highlightButton('attendanceStatus', status);
+    }
+
+    // 식사 여부 설정
+    function setMeal(status) {
+        document.getElementById('mealStatus').value = status;
+        highlightButton('mealStatus', status);
+    }
+
+    // 버튼 하이라이트 함수
+    function highlightButton(type, value) {
+        var buttons = document.querySelectorAll(`button[onclick^="set${type.charAt(0).toUpperCase() + type.slice(1)}"]`);
+        buttons.forEach(button => {
+            button.classList.remove('selected');
+            if (button.textContent.includes(value)) {
+                button.classList.add('selected');
+            }
+        });
+    }
+
+    // 참석 여부 제출
+    document.getElementById("attendanceForm").onsubmit = function(e) {
+        e.preventDefault();
+        var name = document.getElementById("attendanceName").value;
+        var attendanceStatus = document.getElementById("attendanceStatus").value;
+        var mealStatus = document.getElementById("mealStatus").value;
+        var guestCount = document.getElementById("guestCount").value;
+        
+        // 여기서 참석 여부를 서버로 전송하는 코드를 추가해야 합니다.
+        // 예: sendAttendanceToServer(name, attendanceStatus, mealStatus, guestCount);
+        
+        alert(`${name}님의 참석 여부(${attendanceStatus}), 식사 여부(${mealStatus}), 동반인원 수(${guestCount})가 전달되었습니다.`);
+        attendanceModal.style.display = "none";
+        this.reset();
+    };
+
+    // 카카오 지도 초기화
+    var mapContainer = document.getElementById('map');
+    var mapOption = {
+        center: new kakao.maps.LatLng(37.417184,127.128220), // 예시 좌표, 실제 위치로 변경 필요
+        level: 3
+    };
+
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+    // 마커 생성
+    var markerPosition = new kakao.maps.LatLng(37.417184,127.128220);
+    var marker = new kakao.maps.Marker({
+        position: markerPosition
+    });
+    marker.setMap(map);
+
+    // 인포윈도우 생성
+    var iwContent = '<div style="padding:5px;">제히 웨딩홀<br><a href="https://map.kakao.com/link/map/OO 웨딩홀,37.417184,127.128220" style="color:blue" target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/OO 웨딩홀,37.417184,127.128220" style="color:blue" target="_blank">길찾기</a></div>';
+    var infowindow = new kakao.maps.InfoWindow({
+        content : iwContent
+    });
+    infowindow.open(map, marker);
+
+    </script>
+</body>
+</html>
